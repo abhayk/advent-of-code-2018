@@ -7,7 +7,6 @@ import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class Day4
@@ -68,10 +67,28 @@ public class Day4
 
         int[] freq = getFrequency( timesOfMostSleepyGuard );
 
-        int maxIndex = getIndexOfMax( freq );
+        int maxIndex = getMaxAndItsIndex( freq ).getValue();
 
         System.out.println( mostSleepyGuard * maxIndex );
 
+        int maxAmongAll = Integer.MIN_VALUE;
+        int mostProbableGuard = 0;
+        int indexOfMax = 0;
+
+        for(Map.Entry<Integer, List<int[]>> entry : guardTimes.entrySet() )
+        {
+            int[] freqOfGuard = getFrequency( entry.getValue() );
+
+            AbstractMap.SimpleEntry<Integer, Integer> maxAndIndex = getMaxAndItsIndex( freqOfGuard );
+
+            if( maxAndIndex.getKey() > maxAmongAll )
+            {
+                maxAmongAll = maxAndIndex.getKey();
+                mostProbableGuard = entry.getKey();
+                indexOfMax = maxAndIndex.getValue();
+            }
+        }
+        System.out.println( indexOfMax * mostProbableGuard );
 
     }
 
@@ -89,7 +106,7 @@ public class Day4
         return freq;
     }
 
-    private static int getIndexOfMax( int[] arr )
+    private static AbstractMap.SimpleEntry<Integer, Integer> getMaxAndItsIndex(int[] arr )
     {
         int max = Integer.MIN_VALUE;
         int maxIndex = 0;
@@ -102,7 +119,7 @@ public class Day4
                 maxIndex = i;
             }
         }
-        return maxIndex;
+        return new AbstractMap.SimpleEntry<>(max, maxIndex);
     }
 
     enum STATE
