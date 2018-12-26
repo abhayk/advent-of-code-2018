@@ -14,7 +14,7 @@ public class Day16
         List<String> input2 = Files.readAllLines( Paths.get("resources//day16_2.txt") );
 
         ListIterator<String> iterator = input1.listIterator();
-        List<BiConsumer<int[], int[]>> functions = getFunctions();
+        List<BiConsumer<int[], int[]>> functions = getFunctionList();
         int matchMoreThanThree = 0;
         Map<Integer, Integer> cmdFunctionIndex = new HashMap<>();
 
@@ -59,26 +59,31 @@ public class Day16
                 .toArray();
     }
 
-    private static List<BiConsumer<int[], int[]>> getFunctions()
+    private static List<BiConsumer<int[], int[]>> getFunctionList()
     {
-        List<BiConsumer<int[], int[]>> functions = new ArrayList<>();
+        return new ArrayList<>( getFunctionMap().values() );
+    }
 
-        functions.add( (register, cmd) -> register[cmd[3]] = register[cmd[1]] + register[cmd[2]]);
-        functions.add( (register, cmd) -> register[cmd[3]] = register[cmd[1]] + cmd[2]);
-        functions.add( (register, cmd) -> register[cmd[3]] = register[cmd[1]] * register[cmd[2]]);
-        functions.add( (register, cmd) -> register[cmd[3]] = register[cmd[1]] * cmd[2]);
-        functions.add( (register, cmd) -> register[cmd[3]] = register[cmd[1]] & register[cmd[2]]);
-        functions.add( (register, cmd) -> register[cmd[3]] = register[cmd[1]] & cmd[2]);
-        functions.add( (register, cmd) -> register[cmd[3]] = register[cmd[1]] | register[cmd[2]]);
-        functions.add( (register, cmd) -> register[cmd[3]] = register[cmd[1]] | cmd[2]);
-        functions.add( (register, cmd) -> register[cmd[3]] = register[cmd[1]]);
-        functions.add( (register, cmd) -> register[cmd[3]] = cmd[1]);
-        functions.add( (register, cmd) -> register[cmd[3]] = cmd[1] > register[cmd[2]] ? 1 : 0);
-        functions.add( (register, cmd) -> register[cmd[3]] = register[cmd[1]] > cmd[2] ? 1 : 0);
-        functions.add( (register, cmd) -> register[cmd[3]] = register[cmd[1]] > register[cmd[2]] ? 1 : 0);
-        functions.add( (register, cmd) -> register[cmd[3]] = cmd[1] == register[cmd[2]] ? 1 : 0);
-        functions.add( (register, cmd) -> register[cmd[3]] = register[cmd[1]] == cmd[2] ? 1 : 0);
-        functions.add( (register, cmd) -> register[cmd[3]] = register[cmd[1]] == register[cmd[2]] ? 1 : 0);
+    public static Map<String, BiConsumer<int[], int[]>> getFunctionMap()
+    {
+        Map<String, BiConsumer<int[], int[]>> functions = new HashMap<>();
+
+        functions.put("addr", (register, cmd) -> register[cmd[3]] = register[cmd[1]] + register[cmd[2]]);
+        functions.put("addi", (register, cmd) -> register[cmd[3]] = register[cmd[1]] + cmd[2]);
+        functions.put("mulr", (register, cmd) -> register[cmd[3]] = register[cmd[1]] * register[cmd[2]]);
+        functions.put("muli", (register, cmd) -> register[cmd[3]] = register[cmd[1]] * cmd[2]);
+        functions.put("banr", (register, cmd) -> register[cmd[3]] = register[cmd[1]] & register[cmd[2]]);
+        functions.put("bani", (register, cmd) -> register[cmd[3]] = register[cmd[1]] & cmd[2]);
+        functions.put("borr", (register, cmd) -> register[cmd[3]] = register[cmd[1]] | register[cmd[2]]);
+        functions.put("bori", (register, cmd) -> register[cmd[3]] = register[cmd[1]] | cmd[2]);
+        functions.put("setr", (register, cmd) -> register[cmd[3]] = register[cmd[1]]);
+        functions.put("seti", (register, cmd) -> register[cmd[3]] = cmd[1]);
+        functions.put("gtir", (register, cmd) -> register[cmd[3]] = cmd[1] > register[cmd[2]] ? 1 : 0);
+        functions.put("gtri", (register, cmd) -> register[cmd[3]] = register[cmd[1]] > cmd[2] ? 1 : 0);
+        functions.put("gtrr", (register, cmd) -> register[cmd[3]] = register[cmd[1]] > register[cmd[2]] ? 1 : 0);
+        functions.put("eqir", (register, cmd) -> register[cmd[3]] = cmd[1] == register[cmd[2]] ? 1 : 0);
+        functions.put("eqri", (register, cmd) -> register[cmd[3]] = register[cmd[1]] == cmd[2] ? 1 : 0);
+        functions.put("eqrr", (register, cmd) -> register[cmd[3]] = register[cmd[1]] == register[cmd[2]] ? 1 : 0);
 
         return functions;
     }
