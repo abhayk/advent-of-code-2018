@@ -16,9 +16,9 @@ public class Day19
         solve( input, new int[6] );
         System.out.println( System.currentTimeMillis() - start);
 
-        int[] registers = new int[6];
-        registers[0] = 1;
-        solve( input, registers);
+        //int[] registers = new int[6];
+        //registers[0] = 1;
+        //solve( input, registers);
     }
 
     private static void solve( List<String> input, int[] registers )
@@ -45,14 +45,14 @@ public class Day19
         {
             if( insPointer < 0 || insPointer >= input.size() )
                 break;
-            System.out.println(insPointer);
+            //System.out.println(insPointer);
             String[] split = splitIns.get( insPointer );
             String op = split[0];
             int[] cmd = cmds.get( insPointer );
             registers[ insRegister ] = insPointer;
             functionMap.get( op ).accept( registers, cmd );
             insPointer = registers[ insRegister ] + 1;
-            System.out.println( Arrays.toString( registers));
+            //System.out.println( Arrays.toString( registers));
         }
         System.out.println(Arrays.toString( registers ));
     }
